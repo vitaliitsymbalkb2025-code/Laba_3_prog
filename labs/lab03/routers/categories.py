@@ -5,12 +5,15 @@ from typing import Annotated
 from fastapi import APIRouter, Path, Response, status
 
 from .. import repository
+from ..config import SQLITE_INT_MAX
 from ..schemas import CategoryCreate, CategoryRead
 from . import RESPONSE_404, RESPONSE_409, to_http_error
 
 router = APIRouter(prefix="/categories", tags=["categories"])
 
-CategoryId = Annotated[int, Path(gt=0, description="Ідентифікатор категорії")]
+CategoryId = Annotated[
+    int, Path(gt=0, le=SQLITE_INT_MAX, description="Ідентифікатор категорії")
+]
 
 
 @router.get(

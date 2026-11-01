@@ -7,6 +7,7 @@ from pydantic import BaseModel, ConfigDict, Field
 from .config import (
     BULK_MAX_ITEMS,
     BULK_MIN_ITEMS,
+    SQLITE_INT_MAX,
     VALUE_MAX,
     VALUE_MIN,
     VALUE_UNIT,
@@ -54,6 +55,7 @@ class RecordCreate(BaseModel):
     )
     category_id: int = Field(
         gt=0,
+        le=SQLITE_INT_MAX,
         strict=True,
         description="Ідентифікатор наявної категорії",
         examples=[1],

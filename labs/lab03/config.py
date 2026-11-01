@@ -20,6 +20,8 @@ CATEGORY_NAMES = ("siem", "helpdesk", "monitoring")
 RECORD_TITLE = "Вимірювання опрацювання"
 STATUSES = ("new", "in_progress", "done")
 
+SQLITE_INT_MAX = 2**63 - 1
+
 BULK_MIN_ITEMS = 1
 BULK_MAX_ITEMS = 100
 PAGE_DEFAULT_LIMIT = 20

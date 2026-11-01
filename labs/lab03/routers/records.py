@@ -8,6 +8,7 @@ from .. import repository
 from ..config import (
     PAGE_DEFAULT_LIMIT,
     PAGE_MAX_LIMIT,
+    SQLITE_INT_MAX,
     VALUE_MAX,
     VALUE_MIN,
     VALUE_UNIT,
@@ -17,7 +18,9 @@ from . import RESPONSE_404, RESPONSE_409, to_http_error
 
 router = APIRouter(prefix="/records", tags=["records"])
 
-RecordId = Annotated[int, Path(gt=0, description="Ідентифікатор запису")]
+RecordId = Annotated[
+    int, Path(gt=0, le=SQLITE_INT_MAX, description="Ідентифікатор запису")
+]
 
 
 @router.get(
@@ -31,7 +34,8 @@ RecordId = Annotated[int, Path(gt=0, description="Ідентифікатор з�
 )
 def list_records(
     category_id: Annotated[
-        int | None, Query(gt=0, description="Лише записи цієї категорії")
+        int | None,
+        Query(gt=0, le=SQLITE_INT_MAX, description="Лише записи цієї категорії"),
     ] = None,
     record_status: Annotated[
         Status | None, Query(alias="status", description="Лише записи з цим статусом")
@@ -56,7 +60,9 @@ def list_records(
     limit: Annotated[
         int, Query(ge=1, le=PAGE_MAX_LIMIT, description="Максимум записів")
     ] = PAGE_DEFAULT_LIMIT,
-    offset: Annotated[int, Query(ge=0, description="Кількість пропущених")] = 0,
+    offset: Annotated[
+        int, Query(ge=0, le=SQLITE_INT_MAX, description="Кількість пропущених")
+    ] = 0,
 ) -> list[dict]:
     """Отримати сторінку записів."""
     return repository.list_records(
